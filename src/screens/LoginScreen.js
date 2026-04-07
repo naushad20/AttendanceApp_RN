@@ -7,28 +7,14 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState('');
 
   const login = async () => {
-    try {
-      await auth().signInWithEmailAndPassword(email, password);
-      navigation.replace('Home');
-    } catch (e) {
-      Alert.alert('Error', e.message);
-    }
-  };
-
-  const register = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please enter email and password');
-      return;
-    }
-
-    if (password.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters');
+      Alert.alert('Error', 'Enter email & password');
       return;
     }
 
     try {
-      await auth().createUserWithEmailAndPassword(email.trim(), password);
-      Alert.alert('Success', 'Account created');
+      await auth().signInWithEmailAndPassword(email.trim(), password);
+      navigation.replace('Home');
     } catch (e) {
       Alert.alert('Error', e.message);
     }
@@ -38,18 +24,27 @@ export default function LoginScreen({ navigation }) {
     <View style={{ padding: 40, marginTop: 100 }}>
       <TextInput
         placeholder="Email"
-        placeholderTextColor={'blue'}
+        value={email}
         onChangeText={setEmail}
+        autoCapitalize="none"
       />
+
       <TextInput
         placeholder="Password"
-        placeholderTextColor={'blue'}
+        value={password}
         secureTextEntry
         onChangeText={setPassword}
       />
+
       <Button title="Login" onPress={login} />
+
       <View style={{ height: 10 }} />
-      <Button title="Register" onPress={register} />
+
+      {/* 👉 Navigate instead of register */}
+      <Button
+        title="Go to Register"
+        onPress={() => navigation.navigate('Register')}
+      />
     </View>
   );
 }
